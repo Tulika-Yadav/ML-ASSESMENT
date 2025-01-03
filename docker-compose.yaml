@@ -13,6 +13,7 @@ services:
       - ./src:/app
     # profiles:
     #   - app
+    # if GPU is available, uncomment below section
     # deploy:
     #   resources:
     #     reservations:

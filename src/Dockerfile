@@ -23,4 +23,4 @@ EXPOSE 8080
 # change streamlit server config in prod
 ENTRYPOINT ["streamlit","run"]
 
-CMD ["streamlit_frontend.py", "--server.port", "8080"]
+CMD ["str_app.py", "--server.port", "8080"]

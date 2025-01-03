@@ -8,6 +8,7 @@ from pathlib import Path
 import plotly.graph_objects as go
 import streamlit as st
 import torch
+import gdown as g
 
 from models.mobilenet import classifictionModel as MobileNetClf
 from models.vit_hf import ViTLightningModule
@@ -69,11 +70,11 @@ def main():
     st.sidebar.markdown("---")
 
     # check if GPU is available
-    cuda_available = torch.cuda.is_available()
-    if cuda_available:
-        st.sidebar.info("GPU available 🔥 - Predictions will be sped up")
-    else:
-        st.sidebar.warning("GPU NOT available 🚨 - Predictions might be slow")
+    # cuda_available = torch.cuda.is_available()
+    # if cuda_available:
+    #     st.sidebar.info("GPU available 🔥 - Predictions will be sped up")
+    # else:
+    #     st.sidebar.warning("GPU NOT available 🚨 - Predictions might be slow")
 
     st.title("Skin Cancer Classification API")
 
@@ -149,8 +150,14 @@ def main():
 
 
 if __name__ == "__main__":
-    # if not Path(MODEL_PATH).exists():
-    #     drive_model_id = "1oQbFgQAxUM13m1nMmZ40QKNWho4Vllqq"
-    #     g.download(id=drive_model_id, output=MODEL_PATH)
+    if not Path(VIT_MODEL_PATH).exists():
+        drive_model_id = "1wW0l2DxBeAVwMJFDJM8uB5tpm1dAs0l9"
+        Path(VIT_MODEL_PATH).parent.mkdir(exist_ok=True, parents=True)
+        g.download(id=drive_model_id, output=VIT_MODEL_PATH)
+
+    if not Path(MOB_MODEL_PATH).exists():
+        drive_model_id = "1v4sPBuqsAeFVLnD-4ELTQTWxl21Yp_Aw"
+        Path(MOB_MODEL_PATH).parent.mkdir(exist_ok=True, parents=True)
+        g.download(id=drive_model_id, output=MOB_MODEL_PATH)
 
     main()
