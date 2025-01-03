@@ -1,20 +1,19 @@
 # ruff : noqa F401
 
 import warnings
-
-from pytorch_grad_cam import GradCAM
-from pytorch_grad_cam.utils.image import show_cam_on_image
-from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
-
-warnings.filterwarnings("ignore")
 from typing import Callable, List, Optional
 
 import cv2
 import numpy as np
 import torch
 from PIL import Image
+from pytorch_grad_cam import GradCAM
+from pytorch_grad_cam.utils.image import show_cam_on_image
+from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
 from torchvision.transforms import CenterCrop, Compose, Normalize, Resize, ToTensor
 from transformers import ViTImageProcessor
+
+warnings.filterwarnings("ignore")
 
 processor = ViTImageProcessor.from_pretrained("google/vit-base-patch16-224-in21k")
 image_mean = processor.image_mean

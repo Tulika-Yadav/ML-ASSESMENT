@@ -21,7 +21,7 @@ _val_transforms = Compose(
 
 
 class ViTLightningModule(L.LightningModule):
-    def __init__(self, num_labels=10):
+    def __init__(self):
         super(ViTLightningModule, self).__init__()
         self.vit = ViTForImageClassification.from_pretrained(
             "google/vit-base-patch16-224-in21k",
@@ -35,7 +35,7 @@ class ViTLightningModule(L.LightningModule):
         return outputs.logits
 
     def pred_transforms(self, example_d):
-        print(example_d["image"])
+        # print(example_d["image"])
         example_d["pixel_values"] = _val_transforms(example_d["image"].convert("RGB"))
         return example_d
 
