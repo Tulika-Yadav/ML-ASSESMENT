@@ -15,9 +15,9 @@ from utils.mob_gradcam import get_mob_grad_cam
 from utils.vit_gradcam import get_vit_grad_cam
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-VIT_MODEL_PATH = r".\saved_models\vit-hf-epoch=08-valid_acc=0.0000.ckpt"
-MOB_MODEL_PATH = r".\saved_models\mobile_net-epoch=15-valid_acc=0.8317.ckpt"
-DEMO_IMG_PATH = r".\img_examples\test_mal_1091.jpg"
+VIT_MODEL_PATH = r"./saved_models/vit-hf-epoch=08-valid_acc=0.0000.ckpt"
+MOB_MODEL_PATH = r"./saved_models/mobile_net-epoch=15-valid_acc=0.8317.ckpt"
+DEMO_IMG_PATH = r"./img_examples/test_mal_1091.jpg"
 
 st.set_page_config(
     page_title="Skin cancer detection",
@@ -116,7 +116,7 @@ def main():
     if detection_button:
         label, probabs = model.predict(img_file.name)
         st.write(f"Predicted Label: {label}")
-        probabs = probabs.detach().squeeze().numpy()
+        probabs = probabs.detach().cpu().squeeze().numpy()
         ben_prob, mal_prob = probabs.tolist()
         ben_prob, mal_prob = round(ben_prob, 2), round(mal_prob, 2)
 

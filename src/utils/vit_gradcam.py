@@ -14,6 +14,8 @@ from torchvision.transforms import CenterCrop, Compose, Normalize, Resize, ToTen
 from transformers import ViTImageProcessor
 
 warnings.filterwarnings("ignore")
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 
 processor = ViTImageProcessor.from_pretrained("google/vit-base-patch16-224-in21k")
 image_mean = processor.image_mean
@@ -102,6 +104,7 @@ def reshape_transform_vit_huggingface(x):
 
 
 def get_vit_grad_cam(model, img_path):
+    model = model.to(DEVICE)
     sub_model = model.vit
     targets_for_gradcam = [
         ClassifierOutputTarget(category_name_to_index(sub_model, "Benign")),
@@ -120,6 +123,7 @@ def get_vit_grad_cam(model, img_path):
     image = Image.open(img_path)
     image_resized = image.resize((224, 224))
     tensor_resized = _val_transforms(image)  # .to("cuda")
+    tensor_resized = tensor_resized.to(DEVICE)
 
     out_img = Image.fromarray(
         run_grad_cam_on_image(

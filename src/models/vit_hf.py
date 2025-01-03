@@ -4,6 +4,9 @@ import lightning as L
 from PIL import Image
 from torchvision.transforms import CenterCrop, Compose, Normalize, Resize, ToTensor
 from transformers import ViTForImageClassification, ViTImageProcessor
+import torch
+
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 processor = ViTImageProcessor.from_pretrained("google/vit-base-patch16-224-in21k")
 image_mean = processor.image_mean
@@ -46,6 +49,7 @@ class ViTLightningModule(L.LightningModule):
         image = Image.open(img_path)
         example_dict = {"image": image}
         inputs = self.pred_transforms(example_dict)
+        inputs["pixel_values"] = inputs["pixel_values"].to(DEVICE)
         probab = self(inputs["pixel_values"].unsqueeze(0)).softmax(dim=1)
         label = self.vit.config.id2label[probab.argmax().item()]
         return label, probab

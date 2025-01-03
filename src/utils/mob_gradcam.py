@@ -8,6 +8,9 @@ from pytorch_grad_cam import GradCAM
 from pytorch_grad_cam.utils.image import show_cam_on_image
 from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
 
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
 compulsory_transforms = A.Compose(
     [
         A.Resize(224, 224),
@@ -18,6 +21,7 @@ compulsory_transforms = A.Compose(
 
 
 def get_mob_grad_cam(model, img_path):
+    model = model.to(DEVICE)
     target_layers = [model.model.features[18][0]]
     image = Image.open(img_path)
 
@@ -26,6 +30,7 @@ def get_mob_grad_cam(model, img_path):
         compulsory_transforms(image=np.array(image))["image"], dim=0
     )
     input_tensor = model_inp1
+    input_tensor = input_tensor.to(DEVICE)
     targets = [ClassifierOutputTarget(0), ClassifierOutputTarget(1)]
 
     with GradCAM(model=model, target_layers=target_layers) as cam:

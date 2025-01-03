@@ -11,6 +11,8 @@ from albumentations.pytorch import ToTensorV2
 from PIL import Image
 
 MODEL_BACKBONE_WTS = tv_models.MobileNet_V2_Weights.IMAGENET1K_V2
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 
 compulsory_transforms = A.Compose(
     [
@@ -58,6 +60,7 @@ class classifictionModel(L.LightningModule):
     ):
         img = Image.open(img_path)
         img = torch.unsqueeze(compulsory_transforms(image=np.array(img))["image"], dim=0)
+        img = img.to(DEVICE)
         probab = self(img, probab=True)
         label = self.id2label[probab.argmax().item()]
         return label, probab
